@@ -22,7 +22,7 @@ module SolidErrors
     end
 
     def send_email
-      ErrorMailer.error_occurred(self).deliver_later
+      ErrorMailer.error_occurred(self).deliver_later if should_send_mail?
     end
 
     def clear_resolved_errors
@@ -44,6 +44,14 @@ module SolidErrors
       return false unless (id % 100).zero?
 
       true
+    end
+
+    def should_send_email?
+      return true unless SolidErrors.email_grouping?
+
+      count = self.error.occurrences.where(created_at: SolidErrors.email_grouping_period.ago..).count
+      factor = Math.log2(count)
+      factor.to_i == factor
     end
   end
 end

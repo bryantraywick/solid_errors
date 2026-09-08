@@ -14,6 +14,8 @@ module SolidErrors
   mattr_accessor :email_from, default: "solid_errors@noreply.com"
   mattr_accessor :email_to
   mattr_accessor :email_subject_prefix
+  mattr_accessor :email_grouping, default: false
+  mattr_accessor :email_grouping_period, default: 5.minutes
   mattr_accessor :destroy_after
 
   class << self
@@ -31,6 +33,10 @@ module SolidErrors
 
     def send_emails?
       send_emails && email_to.present?
+    end
+
+    def email_grouping?
+      email_grouping
     end
   end
 end
