@@ -22,7 +22,7 @@ module SolidErrors
     end
 
     def send_email
-      ErrorMailer.error_occurred(self).deliver_later if should_send_mail?
+      ErrorMailer.error_occurred(self).deliver_later if should_send_email?
     end
 
     def clear_resolved_errors
